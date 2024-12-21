@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const VideoSchema = new Schema({
     user: {
@@ -10,7 +10,7 @@ const VideoSchema = new Schema({
         type: String,
         required: true
     },
-    description:{
+    description: {
         type: String
     },
     videoLink: {
@@ -19,20 +19,16 @@ const VideoSchema = new Schema({
     },
     thumbnail: {
         type: String,
-        required : true
+        required: true
     },
-    videoType:{
+    videoType: {
         type: String,
-        default:"All"
+        default: "All"
     },
-    likes: {
-        type: Number,
-        default : 0
-    },
-    dislikes: {
-        type: Number,
-        default : 0
-    },
-},{timestamps: true})
+    views: { type: Number, default: 0 },
+    tags: [{ type: String }], // Tags for searching videos
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who liked the video
+    dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who disliked the video
+}, { timestamps: true })
 
 export const Video = mongoose.model('Video', VideoSchema);

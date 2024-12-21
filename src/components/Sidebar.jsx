@@ -23,22 +23,26 @@ import { SiStylelint } from "react-icons/si";
 import { MdPodcasts } from "react-icons/md";
 import { BiVideo } from "react-icons/bi";
 import { GiLinkedRings } from "react-icons/gi";
+import { Link } from 'react-router-dom';
 const Sidebar = () => {
     const sidebarItems = [
         {
             id: 1,
             name: "Home",
             icon: <GoHome />,
+            url:"/"
         },
         {
             id: 2,
             name: "Shorts",
             icon: <SiYoutubeshorts />,
+            url:"/"
         },
         {
             id: 3,
             name: "Subscriptions",
             icon: <MdOutlineSubscriptions />,
+            url:"/subscriptions"
         }
     ]
     const sidebarItems2 = [
@@ -46,6 +50,8 @@ const Sidebar = () => {
             id: 1,
             name: "Your Channel",
             icon: <PiUserSquareThin />,
+            url:"/profile"
+
         },
         {
             id: 2,
@@ -159,30 +165,34 @@ const Sidebar = () => {
         <div className='px-6 w-full md:w-1/2 lg:w-1/3  hidden md:block h-[calc(100vh-6.625rem)] overflow-y-scroll overflow-x-hidden'>
             <div className='space-y-3 items-center'>
                 {sidebarItems.map((item) => (
-                    <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
-                        <div className='text-xl cursor-pointer '>
-                            {item.icon}
+                    <Link to={`${item?.url}`}>
+                        <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
+                            <div className='text-xl cursor-pointer '>
+                                {item.icon}
+                            </div>
+                            <span>{item.name}</span>
                         </div>
-                        <span>{item.name}</span>
-                    </div>
+                    </Link>
                 ))}
             </div>
             <br />
             <hr />
             {/* You section */}
-            <div className='space-y-3 mt-4 items-center'>
+            < div className='space-y-3 mt-4 items-center' >
                 <div className='flex items-center space-x-2'>
                     <h1>You</h1>
                     <FaChevronRight />
                 </div>
-                {sidebarItems2.map((item) => (
-                    <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
-                        <div className='text-xl cursor-pointer '>
-                            {item.icon}
+                {
+                    sidebarItems2.map((item) => (
+                        <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
+                            <div className='text-xl cursor-pointer '>
+                                {item.icon}
+                            </div>
+                            <span>{item.name}</span>
                         </div>
-                        <span>{item.name}</span>
-                    </div>
-                ))}
+                    ))
+                }
             </div>
             <br />
             <hr />

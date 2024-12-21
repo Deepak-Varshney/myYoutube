@@ -11,7 +11,7 @@ const [videos, setVideos] = useState([]);
 
 useEffect(() => {
   const fetchVideos = async () => {
-    const response = await axios("http://localhost:3000/api/videos/all");
+    const response = await axios("/api/videos/all");
     console.log(response.data.data);
     setVideos(response.data.data);
   };

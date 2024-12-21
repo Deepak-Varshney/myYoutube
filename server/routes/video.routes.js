@@ -1,11 +1,20 @@
 import express from 'express';
-import { getAllVideos, getAllVideosByUserId, getVideoById, uploadVideo } from '../controllers/video.controller.js';
+import { deleteVideo, dislikeVideo, getAllVideos, getAllVideosByUserId, getRandomVideos, getTrendingVideos, getVideoById, getVideosByTags, increaseViewCount, likeVideo, searchVideos, uploadVideo } from '../controllers/video.controller.js';
 import { verifyToken } from '../middleware/token.js';
 const router = express.Router();
 
 router.post('/upload', verifyToken, uploadVideo);
+router.delete('/delete/:id', verifyToken, deleteVideo);
 router.get('/all', getAllVideos);
-router.get('/getVideoById/:id', getVideoById);
-router.get('/channel/:userId', getAllVideosByUserId);
+router.get('/find/:id', getVideoById);
+router.get('/channel/:channelId', getAllVideosByUserId);
+router.get('/trending', getTrendingVideos);
+router.get('/random', getRandomVideos);
+router.get('/search', searchVideos);
+router.get('/tags', getVideosByTags);
+router.put('/like/:id', verifyToken, likeVideo);
+router.put('/view/:id', verifyToken, increaseViewCount);
+router.put('/dislike/:id', verifyToken, dislikeVideo);
+
 
 export default router;

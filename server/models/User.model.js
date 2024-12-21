@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const UserSchema = new Schema({
     email: {
@@ -10,7 +10,7 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    username:{
+    username: {
         type: String,
         required: true
     },
@@ -20,12 +20,14 @@ const UserSchema = new Schema({
     },
     channelName: {
         type: String,
-        required : true
+        required: true
     },
     about: {
         type: String,
-        required : true
+        required: true
     },
-},{timestamps: true})
+    subscribers: { type: Number, default: 0 },
+    subscribedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+}, { timestamps: true })
 
 export const User = mongoose.model('User', UserSchema);

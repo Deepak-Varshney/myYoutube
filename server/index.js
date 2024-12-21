@@ -25,7 +25,7 @@ app.use(cors(
     }
 ));
 
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/comments', commentRoutes);
