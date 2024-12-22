@@ -5,11 +5,12 @@ import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { abbreviateNumber } from 'js-abbreviation-number'
 import { format } from 'timeago.js'
 function Video({ video }) {
+    console.log(video)
     return (
         <div className=''>
             <Link to={`/video/${video?._id}`} className=''>
                 <div className='flex flex-col'>
-                    <div className=' relative h-48 md:h-56 md: rounded-xl hover:rounded-none duration-200 overflow-hidden'>
+                    <div className=' h-48 md:h-56 md: rounded-xl hover:rounded-none duration-200 overflow-hidden'>
                         <img src={video?.thumbnail} alt="" className='w-full h-full' />
                         {
                             video?.lengthSeconds && <Time time={video?.lengthSeconds} />
@@ -30,7 +31,7 @@ function Video({ video }) {
                             <span className='flex items-center font-semibold mt-2 text-[12px] text-gray-600'>{video?.author?.title}{video?.author?.badges[0]?.type === "VERIFIED_CHANNEL" && (<BsFillCheckCircleFill className='text-gray-600 ml-1 text-[12px]' />)}</span>
                             <div className='flex texgray-500 text-[12px]'>
                                 <span>
-                                    {`${abbreviateNumber(video?.likes, 2)} likes`}
+                                    {`${abbreviateNumber(video?.views, 2)} Views`}
                                 </span>
                                 <span className="flex text-[24px] leading-none font-bold relative top-[-10px] mx-1">
                                     .

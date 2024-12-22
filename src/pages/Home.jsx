@@ -2,18 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import Video from './Video'
 import ListItems from '../components/ListItems';
-import Loader from '../components/Loader';
 import axios from 'axios';
 function Home() {
-  // const { data, loading } = useAuth();
-  // console.log(data)
+ 
 const [videos, setVideos] = useState([]);
 
 useEffect(() => {
   const fetchVideos = async () => {
     const response = await axios("/api/videos/all");
-    console.log(response.data.data);
-    setVideos(response.data.data);
+    console.log(response.data);
+    setVideos(response.data.videos);
   };
   fetchVideos();
 }, []);
