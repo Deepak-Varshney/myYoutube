@@ -12,8 +12,8 @@ router.get('/trending', getTrendingVideos);
 router.get('/random', getRandomVideos);
 router.get('/search', searchVideos);
 router.get('/tags', getVideosByTags);
-router.put('/like/:id', verifyToken, likeVideo);
 router.put('/view/:id', verifyToken, increaseViewCount);
+router.put('/like/:id', verifyToken, likeVideo);
 router.put('/dislike/:id', verifyToken, dislikeVideo);
 
 

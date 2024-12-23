@@ -192,7 +192,7 @@ const ProfilePage = () => {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:3000/api/users/${id}`);
+      const response = await axios.get(`/api/users/profile/${id}`);
       setUser(response.data);
       setFormData({
         username: response.data.username,
@@ -204,7 +204,7 @@ const ProfilePage = () => {
       if (response.data.videos<=0) {
         return
       }
-      const videosResponse = await axios.get(`/api/videos?ids=${response.data.videos.join(',')}`);
+      // const videosResponse = await axios.get(`/api/videos?ids=${response.data.videos.join(',')}`);
       setVideos(videosResponse.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Error fetching profile');
@@ -244,7 +244,7 @@ const ProfilePage = () => {
           {/* Profile Picture */}
           <div className="w-32 h-32 rounded-full overflow-hidden">
             <img
-              src={user.profilePicture || 'https://th.bing.com/th?id=OIP.yyVZtJgcX_k4j10PaEadSgHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2'}
+              src={user?.profilePicture || 'https://th.bing.com/th?id=OIP.yyVZtJgcX_k4j10PaEadSgHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2'}
               alt={user.username}
               className="w-full h-full object-cover"
             />
