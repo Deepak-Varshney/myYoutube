@@ -11,7 +11,7 @@ function Video({ video }) {
             <Link to={`/video/${video?._id}`} className=''>
                 <div className='flex flex-col'>
                     <div className=' h-48 md:h-56 md: rounded-xl hover:rounded-none duration-200 overflow-hidden'>
-                        <img src={video?.thumbnail} alt="" className='w-full h-full' />
+                        <img src={video?.thumbnail} alt="" className='w-full object-cover h-full' />
                         {
                             video?.lengthSeconds && <Time time={video?.lengthSeconds} />
                         }
@@ -20,7 +20,7 @@ function Video({ video }) {
                         <div className="flex items-start">
                             <div className='flex h-9 w-9 rounded-full overflow-hidden border'>
                                 <img
-                                    className='w-full h-full rounded-full overflow-hidden'
+                                    className='w-full h-full rounded-full object-cover overflow-hidden'
                                     src={video?.user?.profilePicture}
                                     alt=""
                                 />

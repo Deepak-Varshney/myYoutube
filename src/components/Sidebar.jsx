@@ -162,7 +162,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <div className='px-6 w-full md:w-1/2 lg:w-1/3  hidden md:block h-[calc(100vh-6.625rem)] overflow-y-scroll overflow-x-hidden'>
+        <div className='px-6 w-full md:w-1/2 lg:w-1/3  hidden md:block h-[calc(100vh-6.625rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden'>
             <div className='space-y-3 items-center'>
                 {sidebarItems.map((item) => (
                     <Link to={`${item?.url}`}>

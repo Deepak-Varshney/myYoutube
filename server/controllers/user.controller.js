@@ -27,7 +27,7 @@ export const getUser = async (req, res) => {
 // @route   PUT /api/users/profile/update
 
 export const updateUserProfile = async (req, res) => {
-  const { username, email, about, channelName } = req.body;
+  const { username, email, about, channelName, profilePicture } = req.body;
 
   try {
     // Fetch the user from the database
@@ -42,6 +42,7 @@ export const updateUserProfile = async (req, res) => {
     user.email = email || user.email;
     user.about = about || user.about;
     user.channelName = channelName || user.channelName;
+    user.profilePicture = profilePicture || user.profilePicture;
     await user.save();
 
     res.status(200).json({

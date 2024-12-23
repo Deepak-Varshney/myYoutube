@@ -276,6 +276,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'timeago.js';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../redux/userSlice';
 
 const Profile = () => {
   const { userId } = useParams();
@@ -283,6 +285,7 @@ const Profile = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
   const [profileData, setProfileData] = useState({
     channelName: '',
     username: '', // Added username field
@@ -338,16 +341,22 @@ const Profile = () => {
   // Handle save changes
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.put('/api/users/profile/update', profileData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+      const response = await axios.put('/api/users/profile/update', profileData);
+      const loginData = {
+        username: profileData.username,
+        password: profileData.password,
+        about: profileData.about,
+        email: profileData.email,
+        channelName: profileData.channelName,
+        profilePicture: profileData.profilePicture,
+        _id: profile._id
+      }
+      console.log(loginData);
       if (response.status === 200) {
         const updatedProfile = response.data;
         setProfile(updatedProfile);
         setIsEditing(false); // Exit edit mode
+        dispatch(loginSuccess(loginData));
       } else {
         console.error('Failed to update profile');
       }
@@ -361,7 +370,7 @@ const Profile = () => {
     setIsEditing(false);
     setProfileData({
       channelName: profile.channelName,
-      username: profile.username, // Reset username to original
+      username: profile.username,
       about: profile.about,
       email: profile.email,
       profilePicture: profile.profilePicture

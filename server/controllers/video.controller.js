@@ -18,7 +18,7 @@ export const uploadVideo = async (req, res) => {
 export const getAllVideos = async (req, res) => {
   try {
 
-    const videos = await Video.find().populate('user', 'username channelName profilePicture');
+    const videos = await Video.find().populate('user', 'username channelName profilePicture').sort({ updatedAt: -1 });
     res.status(201).json({ message: 'Videos fetched successfully', success: true, total: videos.length, videos  });
 
   }
@@ -33,7 +33,7 @@ export const getAllVideos = async (req, res) => {
 export const getVideoById = async (req, res) => {
   try {
     let { id } = req.params
-    const video = await Video.findById(id).populate('user', 'username channelName profilePicture createdAt subscribedTo subscribers');
+    const video = await Video.findById(id).populate('user', 'username channelName profilePicture createdAt subscribedTo subscribers')
     if (!video) {
       return res.status(404).json({ message: 'Video not found' });
     }
@@ -51,7 +51,7 @@ export const getVideoById = async (req, res) => {
 export const getAllVideosByUserId = async (req, res) => {
   try {
     let { channelId } = req.params;
-    const videos = await Video.find({ user: channelId }).populate('user', 'username channelName profilePicture about');
+    const videos = await Video.find({ user: channelId }).populate('user', 'username channelName profilePicture about').sort({ updatedAt: -1 });
     res.status(201).json({ message: 'Videos fetched successfully', success: true, total: videos.length, videos  });
   }
   catch (error) {
@@ -139,17 +139,6 @@ export const dislikeVideo = async (req, res) => {
 };
 
 
-// @desc    Get random videos
-// @route   GET /api/videos/random
-export const getRandomVideos = async (req, res) => {
-  try {
-    const videos = await Video.aggregate([{ $sample: { size: 44 } }]);
-    res.status(200).json({ message: 'Videos fetched successfully', success: true, total: videos.length, videos});
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 
 // @desc    Get videos sorted by views
 // @route   GET /api/videos/trending
@@ -167,19 +156,19 @@ export const getTrendingVideos = async (req, res) => {
 export const getVideosByTags = async (req, res) => {
   const tags = req.query.tags.split(',');
   try {
-    const videos = await Video.find({ tags: { $in: tags } }).limit(10);
+    const videos = await Video.find({ tags: { $in: tags } }).limit(10).sort({ updatedAt: -1 });
     res.status(200).json({ message: 'Videos fetched successfully', success: true, total: videos.length, videos });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// @desc    Search videos by title
+// @desc    Search videos by title  
 // @route   GET /api/videos/search
 export const searchVideos = async (req, res) => {
   const query = req.query.q;
   try {
-    const videos = await Video.find({ title: { $regex: query, $options: 'i' } }).limit(44);
+    const videos = await Video.find({ title: { $regex: query, $options: 'i' } }).limit(44).sort({ updatedAt: -1 });
     res.status(200).json({ message: 'Videos fetched successfully', success: true, total: videos.length, videos });
   } catch (error) {
     res.status(500).json({ message: error.message });

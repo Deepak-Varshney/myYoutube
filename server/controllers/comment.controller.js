@@ -16,7 +16,7 @@ export const addComment = async (req, res) => {
 export const getAllCommentsByVideoId = async (req, res) => {
     try {
         let { id } = req.params;
-        const comments = await Comment.find({ video: id }).populate('user', 'username channelName profilePicture');
+        const comments = await Comment.find({ video: id }).populate('user', 'username channelName profilePicture').sort({ updatedAt: -1 });
         if (!comments) {
             return res.status(404).json({ message: 'Comments not found' });
         }
