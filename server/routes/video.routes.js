@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteVideo, dislikeVideo, getAllVideos, getAllVideosByUserId, getTrendingVideos, getVideoById, getVideosByTags, increaseViewCount, likeVideo, searchVideos, uploadVideo } from '../controllers/video.controller.js';
+import { deleteVideo, dislikeVideo, getAllVideos, getAllVideosByUserId, getTrendingVideos, getVideoById, getVideosByTags, getVideosByType, increaseViewCount, likeVideo, searchVideos, uploadVideo } from '../controllers/video.controller.js';
 import { verifyToken } from '../middleware/token.js';
 const router = express.Router();
 
@@ -14,6 +14,6 @@ router.get('/tags', getVideosByTags);
 router.put('/view/:id', verifyToken, increaseViewCount);
 router.put('/like/:id', verifyToken, likeVideo);
 router.put('/dislike/:id', verifyToken, dislikeVideo);
-
+router.get('/type/:videoType', getVideosByType);
 
 export default router;

@@ -1,82 +1,63 @@
-// import React, { useEffect, useState } from 'react'
-// import Sidebar from '../components/Sidebar'
-// import Video from './Video'
-// import ListItems from '../components/ListItems';
-// import axios from 'axios';
-// function Home() {
- 
-// const [videos, setVideos] = useState([]);
-
-// useEffect(() => {
-//   const fetchVideos = async () => {
-//     const response = await axios("/api/videos/all");
-//     console.log(response.data);
-//     setVideos(response.data.videos);
-//   };
-//   fetchVideos();
-// }, []);
-//   return (
-//     <div className="flex mt-20">
-//     <Sidebar />
-//     <div className="h-[calc(100vh-6.625rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden">
-//       <ListItems />
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5">
-//         {
-//           videos.map((item) => {
-//             console.log(item)
-//             return <Video key={item?._id} video={item} />;
-//           })}
-//       </div>
-//     </div>
-//   </div>
-//   )
-// }
-
-// export default Home
-
-
-import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import Video from './Video';
-import ListItems from '../components/ListItems';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Sidebar from '../components/Sidebar';
+import ListItems from '../components/ListItems';
+import Video from '../pages/Video';
+import { ClipLoader } from 'react-spinners';
 
-function Home() {
+const Home = () => {
   const [videos, setVideos] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All"); // Track the selected category
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
     const fetchVideos = async () => {
-      // Adjust the API endpoint based on the selected category
-      const response = await axios(`/api/videos/${selectedCategory}`);
-      console.log(response.data);
-      setVideos(response.data.videos);
+      setLoading(true); // Start loading
+      try {
+        const response = await axios(`/api/videos/type/${selectedCategory}`);
+        console.log(response.data);
+        setVideos(response.data.videos);
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      } finally {
+        setLoading(false); // End loading
+      }
     };
 
     fetchVideos();
-  }, [selectedCategory]); // Re-fetch videos when the category changes
+  }, [selectedCategory]);
 
-  // Handle category click
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category); // Update the selected category
+    setSelectedCategory(category);
   };
 
   return (
     <div className="flex mt-20">
+      {loading && <div className="flex justify-center items-center w-full h-full">
+              <ClipLoader size={50} color={"#123abc"} loading={loading} />
+            </div>}
       <Sidebar />
       <div className="h-[calc(100vh-6.625rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden">
         <ListItems onCategoryClick={handleCategoryClick} selectedCategory={selectedCategory} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
-          {
+          {loading ? (
+            <div className="flex justify-center items-center w-full h-full">
+              <ClipLoader size={50} color={"#123abc"} loading={loading} />
+            </div>
+          ) : videos.length === 0 ? (
+            <div className="flex justify-center items-center w-full h-full">
+              <p>No videos found</p>
+            </div>
+          ) : (
             videos.map((item) => {
               console.log(item);
               return <Video key={item?._id} video={item} />;
             })
-          }
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Home;

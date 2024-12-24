@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import { useReducer } from 'react';
 
 export const signup = async (req, res) => {
     try {
@@ -33,7 +34,7 @@ export const signin = async (req, res) => {
             const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
             res.cookie('token', token);
             const { password, ...others } = user._doc;
-            res.status(200).json({ message: "User has been logged in successfully", success: "Yes", token, others });
+            res.status(200).json({ message: "User has been logged in successfully", success: "Yes", token, others, user });
         } else {
             res.status(400).json({ error: "Invalid Credentials" });
         }

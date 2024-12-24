@@ -60,6 +60,17 @@ export const getAllVideosByUserId = async (req, res) => {
   }
 }
 
+export const getVideosByType = async (req, res) => {
+  try {
+    let { videoType } = req.params;
+    const videos = await Video.find({ videoType: videoType }).populate('user', 'username channelName profilePicture about').sort({ updatedAt: -1 });
+    res.status(200).json({ message: 'Videos fetched successfully', success: true, total: videos.length, videos });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error', message: error.message });
+  }
+}
 
 // @desc    Delete a video
 // @route   DELETE /api/videos/delete/:id

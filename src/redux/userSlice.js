@@ -27,11 +27,11 @@ export const userSlice = createSlice({
             state.error = false;
         },
         subscription:(state,action)=>{
-            if (state.currentUser.subscribedUsers.includes(action.payload)) {
-                state.currentUser.subscribedUsers.splice( state.currentUser.subscribedUsers.findIndex(channelId=>channelId===action.payload),1);
+            if (state.currentUser.subscribedTo.includes(action.payload)) {
+                state.currentUser.subscribedTo.splice( state.currentUser.subscribedTo.findIndex(channelId=>channelId===action.payload),1);
             }
             else{
-                state.currentUser.subscribedUsers.push(action.payload);
+                state.currentUser.subscribedTo.push(action.payload);
             }
         }
     }
