@@ -24,7 +24,10 @@ import { MdPodcasts } from "react-icons/md";
 import { BiVideo } from "react-icons/bi";
 import { GiLinkedRings } from "react-icons/gi";
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 const Sidebar = () => {
+    const { theme } = useTheme();
+
     const sidebarItems = [
         {
             id: 1,
@@ -133,7 +136,7 @@ const Sidebar = () => {
         },
         {
             id: 11,
-            name: "Padcasts",
+            name: "Podcasts",
             icon: <MdPodcasts />,
         },
     ];
@@ -160,80 +163,117 @@ const Sidebar = () => {
             icon: <SiYoutubekids />,
         },
     ];
-
-    return (
-        <div className='px-6 w-full md:w-1/2 lg:w-1/3  hidden md:block h-[calc(100vh-6.625rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden'>
-            <div className='space-y-3 items-center'>
+        return (
+            <div
+              className={`px-6 w-full md:w-1/2 lg:w-1/3 hidden md:block h-[calc(100vh-6.625rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden transition-all duration-300 ${
+                theme === "dark" ? "bg-[#0f0f0f] text-gray-300" : "bg-white text-gray-700"
+              }`}
+            >
+              <div className="space-y-3 items-center">
                 {sidebarItems.map((item) => (
-                    <Link to={`${item?.url}`}>
-                        <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
-                            <div className='text-xl cursor-pointer '>
-                                {item.icon}
-                            </div>
-                            <span>{item.name}</span>
-                        </div>
-                    </Link>
+                  <Link to={`${item?.url}`} key={item.id}>
+                    <div
+                      className={`space-x-6 flex items-center duration-300 rounded-xl p-1 ${
+                        theme === "dark"
+                          ? "hover:bg-gray-700"
+                          : "hover:bg-gray-300"
+                      }`}
+                    >
+                      <div className="text-xl cursor-pointer">{item.icon}</div>
+                      <span>{item.name}</span>
+                    </div>
+                  </Link>
                 ))}
-            </div>
-            <br />
-            <hr />
-            {/* You section */}
-            < div className='space-y-3 mt-4 items-center' >
-                <div className='flex items-center space-x-2'>
-                    <h1>You</h1>
-                    <FaChevronRight />
+              </div>
+              <br />
+              <hr className={theme === "dark" ? "border-gray-700" : ""} />
+              
+              {/* You section */}
+              <div className="space-y-3 mt-4 items-center">
+                <div className="flex items-center space-x-2">
+                  <h1>You</h1>
+                  <FaChevronRight />
                 </div>
-                {
-                    sidebarItems2.map((item) => (
-                        <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
-                            <div className='text-xl cursor-pointer '>
-                                {item.icon}
-                            </div>
-                            <span>{item.name}</span>
-                        </div>
-                    ))
-                }
-            </div>
-            <br />
-            <hr />
-            {/* Explore */}
-            <div className='space-y-3 mt-4 items-center'>
-                <h1 className='font-semibold'>Explore</h1>
+                {sidebarItems2.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`space-x-6 flex items-center duration-300 rounded-xl p-1 ${
+                      theme === "dark"
+                        ? "hover:bg-gray-700"
+                        : "hover:bg-gray-300"
+                    }`}
+                  >
+                    <div className="text-xl cursor-pointer">{item.icon}</div>
+                    <span>{item.name}</span>
+                  </div>
+                ))}
+              </div>
+              <br />
+              <hr className={theme === "dark" ? "border-gray-700" : ""} />
+              
+              {/* Explore section */}
+              <div className="space-y-3 mt-4 items-center">
+                <h1 className="font-semibold">Explore</h1>
                 {sidebarItems3.map((item) => (
-                    <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
-                        <div className='text-xl cursor-pointer '>
-                            {item.icon}
-                        </div>
-                        <span>{item.name}</span>
-                    </div>
+                  <div
+                    key={item.id}
+                    className={`space-x-6 flex items-center duration-300 rounded-xl p-1 ${
+                      theme === "dark"
+                        ? "hover:bg-gray-700"
+                        : "hover:bg-gray-300"
+                    }`}
+                  >
+                    <div className="text-xl cursor-pointer">{item.icon}</div>
+                    <span>{item.name}</span>
+                  </div>
                 ))}
-            </div>
-            <br />
-            <hr />
-            {/* More */}
-            <div className='space-y-3 mt-4 items-center'>
-                <h1 className='font-semibold'>More From Youtube</h1>
+              </div>
+              <br />
+              <hr className={theme === "dark" ? "border-gray-700" : ""} />
+              
+              {/* More section */}
+              <div className="space-y-3 mt-4 items-center">
+                <h1 className="font-semibold">More From YouTube</h1>
                 {sidebarItems4.map((item) => (
-                    <div key={item.id} className='space-x-6 flex items-center hover:bg-gray-300 duration-300 rounded-xl p-1'>
-                        <div className='text-xl cursor-pointer text-red-500'>
-                            {item.icon}
-                        </div>
-                        <span>{item.name}</span>
+                  <div
+                    key={item.id}
+                    className={`space-x-6 flex items-center duration-300 rounded-xl p-1 ${
+                      theme === "dark"
+                        ? "hover:bg-gray-700"
+                        : "hover:bg-gray-300"
+                    }`}
+                  >
+                    <div className="text-xl cursor-pointer text-[red]">
+                      {item.icon}
                     </div>
+                    <span>{item.name}</span>
+                  </div>
                 ))}
-            </div>
-            <br />
-            <hr />
-            <span className="text-xs text-gray-600 font-semibold">
+              </div>
+              <br />
+              <hr className={theme === "dark" ? "border-gray-700" : ""} />
+              
+              {/* Footer */}
+              <span
+                className={`text-xs font-semibold ${
+                  theme === "dark" ? "text-gray-500" : "text-gray-600"
+                }`}
+              >
                 About Press Copyright <br /> Contact us Creators <br /> Advertise
                 Developers <br />
                 <p className="mt-3">Terms Privacy Policy & Safety</p> How YouTube works{" "}
                 <br /> Test new features
-            </span>
-            <br />
-            <p className="text-xs text-gray-500 mt-3">© 2024 Deepak Varshney</p>
-        </div>
-    )
+              </span>
+              <br />
+              <p
+                className={`text-xs mt-3 ${
+                  theme === "dark" ? "text-gray-500" : "text-gray-600"
+                }`}
+              >
+                © 2024 Deepak Varshney
+              </p>
+            </div>
+          );
 }
 
 export default Sidebar

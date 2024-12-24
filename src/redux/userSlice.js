@@ -1,42 +1,46 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    currentUser : null,
-    loading : false,
-    error:false
+    currentUser: null,
+    loading: false,
+    error: false
 }
 
 export const userSlice = createSlice({
-    name:'currentUser',
+    name: 'currentUser',
     initialState,
     reducers: {
-        loginStart:(state)=>{
+        loginStart: (state) => {
             state.loading = true
         },
-        loginSuccess:(state,action)=>{
+        loginSuccess: (state, action) => {
             state.loading = false;
             state.currentUser = action.payload
         },
-        loginFailure:(state)=>{
+        loginFailure: (state) => {
             state.loading = false;
             state.error = true;
         },
-        logout:(state)=>{
+        logout: (state) => {
             state.currentUser = null;
             state.loading = false;
             state.error = false;
         },
-        subscription:(state,action)=>{
-            if (state.currentUser.subscribedTo.includes(action.payload)) {
-                state.currentUser.subscribedTo.splice( state.currentUser.subscribedTo.findIndex(channelId=>channelId===action.payload),1);
+        subscription: (state, action) => {
+            const userId = action.payload; // UserId to subscribe/unsubscribe
+            if (state.currentUser.subscribedTo.includes(userId)) {
+                // Unsubscribe
+                state.currentUser.subscribedTo = state.currentUser.subscribedTo.filter(id => id !== userId);
+            } else {
+                // Subscribe
+                state.currentUser.subscribedTo.push(userId);
             }
-            else{
-                state.currentUser.subscribedTo.push(action.payload);
-            }
-        }
+            // Update currentUser in localStorage
+            localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+        },
     }
 })
 
-export const {loginStart, loginSuccess, loginFailure, logout, subscription} = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, subscription } = userSlice.actions;
 
 export default userSlice.reducer;

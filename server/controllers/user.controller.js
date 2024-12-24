@@ -80,7 +80,6 @@ export const subscribe = async (req, res) => {
   try {
     const userId = req.user.id;
     const channelId = req.params.channelId;
-    console.log(userId, channelId);
     // Validate the channel ID
     if (!mongoose.Types.ObjectId.isValid(channelId)) {
       return res.status(400).json({ message: 'Invalid channel ID' });

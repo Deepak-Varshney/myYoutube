@@ -1,104 +1,16 @@
-// // import React, { useEffect, useState } from 'react';
-// // import { useParams } from 'react-router-dom';
-// // import axios from 'axios';
-// // import Video from '../pages/Video';
-// // const SearchResults = () => {
-// //   const { searchQuery } = useParams();
-// //   const [videos, setVideos] = useState([]);
-
-// //   useEffect(() => {
-// //     const fetchSearchResults = async () => {
-// //       try {
-// //         const response = await axios.get(`/api/videos/search?q=${searchQuery}`);
-// //         setVideos(response.data.videos);
-// //       } catch (error) {
-// //         console.error('Error fetching search results:', error);
-// //       }
-// //     };
-
-// //     fetchSearchResults();
-// //   }, [searchQuery]);
-
-// //   return (
-// //     <div className="mt-20 p-4">
-// //       <h1 className="text-2xl font-bold mb-4">Search Results for "{searchQuery}"</h1>
-// //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-// //         {videos.length > 0 ? (
-// //           videos.map((video) => (
-// //             <Video key={video._id} video={video} />
-// //           ))
-// //         ) : (
-// //           <p>No results found.</p>
-// //         )}
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default SearchResults;
-
-// import React, { useEffect, useState } from 'react';
-// import { useLocation } from 'react-router-dom';  // Import useLocation instead of useParams
-// import axios from 'axios';
-// import Video from '../pages/Video';
-
-// const SearchResults = () => {
-//   // useLocation to get query parameters
-//   const { search } = useLocation();
-//   const [videos, setVideos] = useState([]);
-//   const [query, setQuery] = useState('');
-
-//   useEffect(() => {
-//     const searchParams = new URLSearchParams(search);
-//     const q = searchParams.get('q') || '';  // Extract the 'q' parameter from the URL
-
-//     setQuery(q);  // Set the search query to state
-
-//     const fetchSearchResults = async () => {
-//       try {
-//         const response = await axios.get(`/api/videos/search?q=${q}`);
-//         setVideos(response.data.videos);
-//       } catch (error) {
-//         console.error('Error fetching search results:', error);
-//       }
-//     };
-
-//     if (q) {
-//       fetchSearchResults();
-//     }
-//   }, [search]);  // Rerun the effect when the search query changes
-
-//   return (
-//     <div className="mt-20 p-4">
-//       <h1 className="text-2xl font-bold mb-4">Search Results for "{query}"</h1>
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-//         {videos.length > 0 ? (
-//           videos.map((video) => (
-//             <Video key={video._id} video={video} />
-//           ))
-//         ) : (
-//           <p>No results found.</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SearchResults;
-
-
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Video from '../pages/Video';
 import { ThreeDots } from 'react-loader-spinner'; // Import loader component
+import { useTheme } from '../context/ThemeContext'; // Import theme context
 
 const SearchResults = () => {
   const { search } = useLocation();
   const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(true);  // Loading state
+  const [loading, setLoading] = useState(true); 
+  const { theme } = useTheme(); 
 
-  // Get the query from the URL (using useLocation instead of useParams)
   const searchQuery = new URLSearchParams(search).get('q');
 
   useEffect(() => {
@@ -120,12 +32,22 @@ const SearchResults = () => {
   }, [searchQuery]);
 
   return (
-    <div className="mt-20 p-4">
-      <h1 className="text-2xl font-bold mb-4">Search Results for "{searchQuery}"</h1>
+    <div
+      className={`relative top-16 min-h-full p-4 transition-all duration-300 ${
+        theme === 'dark' ? 'bg-[#181818] text-white' : 'bg-white text-gray-800'
+      }`}
+    >
+      <h1
+        className={`text-3xl font-bold mb-6 text-gradient ${
+          theme === 'dark' ? 'text-white' : 'text-gray-800'
+        }`}
+      >
+        Search Results for "{searchQuery}"
+      </h1>
 
       {/* Show loader while fetching data */}
       {loading ? (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center my-16">
           <ThreeDots
             height="80"
             width="80"
@@ -136,13 +58,19 @@ const SearchResults = () => {
           />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {videos.length > 0 ? (
             videos.map((video) => (
-              <Video key={video._id} video={video} />
+              <div
+                className={`video-card p-4 rounded-xl shadow-lg hover:shadow-2xl transform transition-all duration-300 ${
+                  theme === 'dark' ? 'bg-[#2b2b2b] text-white' : 'bg-white text-gray-800'
+                }`}
+              >
+                <Video key={video._id} video={video} />
+              </div>
             ))
           ) : (
-            <p>No results found.</p>
+            <p className="text-center text-gray-500">No results found.</p>
           )}
         </div>
       )}
