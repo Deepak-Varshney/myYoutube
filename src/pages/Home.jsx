@@ -41,7 +41,7 @@ const Home = () => {
     <div className={`flex relative h-full top-16 transition-all duration-300 ${theme === 'dark' ? 'bg-[#0f0f0f] text-white' : 'bg-white text-gray-800'}`}>
       <div className="flex justify-center items-center w-full h-full">
         <Sidebar />
-        <div className="h-[calc(100vh-5rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden">
+        <div className="h-[calc(100vh-4rem)] overflow-y-scroll hide-scrollbar overflow-x-hidden">
           <ListItems onCategoryClick={handleCategoryClick} selectedCategory={selectedCategory} />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
             {loading ? (
