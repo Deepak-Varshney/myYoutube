@@ -10,7 +10,6 @@ import cors from 'cors';
 
 
 dotenv.config();
-dbConnect();
 const app = express();
 app.get('/', (req, res) => {
     res.send('Server is running');
@@ -24,6 +23,20 @@ app.use(cors(
         credentials: true, // Enable credentials (cookies, etc.)
     }
 ));
+
+try {
+    await dbConnect(); // Try to connect to the database
+} catch (error) {
+    console.error(error.message);
+
+    // Handle DB connection error
+    app.use((req, res, next) => {
+        res.status(500).json({
+            success: false,
+            message: error.message, // Send error message to frontend
+        });
+    });
+}
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

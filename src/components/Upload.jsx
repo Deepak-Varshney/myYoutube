@@ -10,11 +10,13 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
     description: '',
     videoLink: '',
     thumbnail: '',
-    type: ''
+    type: '',
+    tags: '' // Add tags field
   });
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const { theme } = useTheme();
+  const [uploadSource, setUploadSource] = useState(null);
 
   const handleChange = (e, name) => {
     setFormData((prevData) => ({
@@ -32,6 +34,7 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
 
     try {
       setLoading(true);
+      setUploadSource(type);
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/dshog03l1/${type}/upload`, data,
         {
@@ -56,10 +59,18 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
     }
   };
 
+  const handleCancelUpload = () => {
+    setLoading(false);
+    setProgress(0);
+    setUploadSource(null);
+    toast.info('Upload cancelled.');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const data = { ...formData, tags: formData.tags.split(',').map(tag => tag.trim()) }; // Convert tags to array
     try {
-      const response = await axios.post('/api/videos/upload', formData);
+      const response = await axios.post('/api/videos/upload', data);
       if (response.status === 201) {
         toast.success('Video uploaded successfully!');
         toggleModal(); // Close modal after successful submission
@@ -75,7 +86,7 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
   return (
     <>
       <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-20">
-        <div className={`p-6 rounded-lg w-[400px] relative transition-all duration-300 ${theme === 'dark' ? 'bg-[#1a1a1a] text-white' : 'bg-white text-gray-800'}`}>
+        <div className={`p-6 rounded-lg max-h-[80vh] overflow-scroll w-[400px] relative transition-all duration-300 ${theme === 'dark' ? 'bg-[#1a1a1a] text-white' : 'bg-white text-gray-800'}`}>
           <h2 className="text-xl font-semibold mb-4">Upload Video</h2>
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="mb-4">
@@ -115,6 +126,18 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
             </div>
 
             <div className="mb-4">
+              <label htmlFor="tags" className="block font-medium">Tags (comma separated)</label>
+              <input
+                type="text"
+                id="tags"
+                name="tags"
+                value={formData.tags}
+                onChange={(e) => handleChange(e, 'tags')}
+                className={`w-full p-3 rounded-md outline-none ${theme === 'dark' ? 'bg-[#2a2a2a] border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-800'}`}
+              />
+            </div>
+
+            <div className="mb-4">
               <label htmlFor="videoFile" className="block font-medium">Video File</label>
               <input
                 type="file"
@@ -123,6 +146,15 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
                 onChange={(e) => handleFileUpload(e, 'video')}
                 className={`w-full p-3 rounded-md outline-none ${theme === 'dark' ? 'bg-[#2a2a2a] border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-800'}`}
               />
+              {formData.videoLink && (
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('videoFile').click()}
+                  className="mt-2 bg-blue-500 text-white py-1 px-2 rounded-md shadow-md hover:bg-blue-600 transition-all duration-200"
+                >
+                  Change Video
+                </button>
+              )}
             </div>
 
             <div className="mb-4">
@@ -134,6 +166,15 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
                 onChange={(e) => handleFileUpload(e, 'image')}
                 className={`w-full p-3 rounded-md outline-none ${theme === 'dark' ? 'bg-[#2a2a2a] border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-800'}`}
               />
+              {formData.thumbnail && (
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('thumbnailFile').click()}
+                  className="mt-2 bg-blue-500 text-white py-1 px-2 rounded-md shadow-md hover:bg-blue-600 transition-all duration-200"
+                >
+                  Change Thumbnail
+                </button>
+              )}
             </div>
 
             {loading && (
@@ -145,6 +186,13 @@ const UploadVideoModal = ({ isOpen, toggleModal }) => {
                   ></div>
                 </div>
                 <p className="text-sm mt-2">Uploading... {progress}%</p>
+                <button
+                  type="button"
+                  onClick={handleCancelUpload}
+                  className="mt-2 bg-red-500 text-white py-1 px-2 rounded-md shadow-md hover:bg-red-600 transition-all duration-200"
+                >
+                  Cancel Upload
+                </button>
               </div>
             )}
 

@@ -2,8 +2,8 @@ import { Video } from '../models/video.model.js';
 
 export const uploadVideo = async (req, res) => {
   try {
-    const { title, description, videoLink, videoType, thumbnail, user } = req.body;
-    const video = new Video({ title, description, videoLink, videoType, thumbnail, user: req.user._id });
+    const { title, description, videoLink, videoType, thumbnail, tags } = req.body;
+    const video = new Video({ title, description, videoLink, videoType, thumbnail, user: req.user._id, tags });
     await video.save();
     res.status(201).json({ message: 'Video uploaded successfully', success: true, video });
   }

@@ -8,12 +8,11 @@ import { useTheme } from '../context/ThemeContext'; // Import theme context
 
 function Video({ video }) {
   const { theme } = useTheme(); // Get current theme (light or dark)
-  
+
   return (
     <div
-      className={`transition-all duration-300 shadow-lg rounded-lg overflow-hidden ${
-        theme === 'dark' ? 'bg-[#0f0f0f] text-white' : 'bg-white text-gray-800'
-      }`}
+      className={`transition-all duration-300 shadow-lg rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-[#0f0f0f] text-white' : 'bg-white text-gray-800'
+        }`}
     >
       <Link to={`/video/${video?._id}`} className="block">
         <div className="flex flex-col">
@@ -24,11 +23,13 @@ function Video({ video }) {
           <div className="flex mt-3 space-x-2">
             <div className="flex items-start">
               <div className="flex h-9 w-9 rounded-full overflow-hidden border">
-                <img
-                  className="w-full h-full rounded-full object-cover"
-                  src={video?.user?.profilePicture}
-                  alt=""
-                />
+                <Link to={`/profile/${video?.user?._id}`}>
+                  <img
+                    className="w-full h-full rounded-full object-cover"
+                    src={video?.user?.profilePicture}
+                    alt=""
+                  />
+                </Link>
               </div>
             </div>
             <div>

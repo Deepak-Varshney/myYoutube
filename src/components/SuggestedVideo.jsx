@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { format } from 'timeago.js';
 
 const SuggestedVideo = ({ video }) => {
   const { theme } = useTheme();
@@ -20,7 +21,7 @@ const SuggestedVideo = ({ video }) => {
           {video.channelName}
         </p>
         <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-          {video.views} views • {new Date(video.createdAt).toLocaleDateString()}
+          {video.views} views • {format(video.createdAt)}
         </p>
       </div>
     </Link>

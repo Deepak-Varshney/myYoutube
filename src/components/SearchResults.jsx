@@ -61,13 +61,8 @@ const SearchResults = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {videos.length > 0 ? (
             videos.map((video) => (
-              <div
-                className={`video-card p-4 rounded-xl shadow-lg hover:shadow-2xl transform transition-all duration-300 ${
-                  theme === 'dark' ? 'bg-[#2b2b2b] text-white' : 'bg-white text-gray-800'
-                }`}
-              >
+            
                 <Video key={video._id} video={video} />
-              </div>
             ))
           ) : (
             <p className="text-center text-gray-500">No results found.</p>
