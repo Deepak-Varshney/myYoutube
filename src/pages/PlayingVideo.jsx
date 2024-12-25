@@ -324,6 +324,8 @@ function PlayingVideo() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
+  const [editingComment, setEditingComment] = useState(null);
+  const [commentText, setCommentText] = useState('');
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
@@ -340,15 +342,13 @@ function PlayingVideo() {
   const fetchVideoDetails = async () => {
     try {
       const res = await axios.get(`/api/videos/find/${id}`);
-      setVideo(res.data.video);
+      setVideo(res?.data.video);
       const commentsRes = await axios.get(`/api/comments/video/${id}`);
-      setComments(commentsRes.data.comments);
-      setLiked(res.data.video.likes.includes(currentUser._id));
-      setDisliked(res.data.video.dislikes.includes(currentUser._id));
+      setComments(commentsRes?.data.comments);
+      setLiked(res?.data.video?.likes.includes(currentUser._id));
+      setDisliked(res?.data.video.dislikes.includes(currentUser._id));
     } catch (error) {
       console.error("Error fetching video details:", error);
-      toast.error("Failed to fetch video details!");
-      navigate('/error');
     }
   };
 
@@ -384,15 +384,33 @@ function PlayingVideo() {
     setShowMenu((prev) => !prev); // Toggle the dropdown menu visibility
   };
 
-  const handleEdit = () => {
-    // Logic for editing the comment
-    console.log("Edit comment:", comment);
+  const handleEdit = (comment) => {
+    setEditingComment(comment);
+    setCommentText(comment.message);
+    setShowMenu(false);
   };
 
-  const handleDelete = () => {
-    // Logic for deleting the comment
-    console.log("Delete comment:", comment);
+  const handleDelete = async (commentId) => {
+    try {
+      await deleteComment(commentId); // Replace with your actual delete API call
+      // Refresh comments or update state to remove the deleted comment
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+    }
+    setShowMenu(false);
   };
+
+    const handleSaveEdit = async () => {
+    try {
+      await editComment(editingComment._id, commentText); // Replace with your actual edit API call
+      // Refresh comments or update state to reflect the edited comment
+    } catch (error) {
+      console.error('Failed to edit comment:', error);
+    }
+    setEditingComment(null);
+    setCommentText('');
+  };
+
   const handleLike = async () => {
     if (!currentUser) {
       toast.error("Login to like a video");
@@ -606,7 +624,8 @@ function PlayingVideo() {
                     <span className="text-gray-600 text-sm">{format(comment?.createdAt)}</span>
                   </div>
                   {/* Three dots icon */}
-                  <button
+                  {currentUser && currentUser._id === comment?.user?._id &&
+                    <button
                     onClick={handleMenuClick}
                     className="absolute top-0 right-0 p-2"
                   >
@@ -622,10 +641,10 @@ function PlayingVideo() {
                       <circle cx="12" cy="6" r="1" />
                       <circle cx="12" cy="18" r="1" />
                     </svg>
-                  </button>
+                  </button>}
 
                   {/* Dropdown menu */}
-                  {showMenu && (
+                  {currentUser && currentUser._id === comment?.user?._id && showMenu && (
                     <div
                       className="absolute top-0 right-0 mt-8 p-2 w-32 bg-white shadow-lg rounded-md text-sm"
                       style={{ zIndex: 10 }}
